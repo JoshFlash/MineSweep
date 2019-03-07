@@ -36,8 +36,7 @@ Minefield::CellIndex* Minefield::GenerateMinefield(unsigned int width, unsigned 
 
 Minefield::Cell Minefield::GetRandomCellStatus() {
 
-    Cell RandomCell = static_cast<Cell>(rand() % MINE);
-    return RandomCell;
+    return static_cast<Cell>(rand() % CLOSED);
 }
 
 std::string Minefield::GetCellAsString(Minefield::Cell cell) {
