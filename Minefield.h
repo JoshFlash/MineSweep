@@ -5,8 +5,16 @@
 
 class Minefield {
 public:
-    Minefield() = default;
-    ~Minefield();
+    Minefield(unsigned int height, unsigned int width) {
+
+            Height = height;
+            Width = width;
+
+            Grid = new Cell[height*width];
+    };
+    ~Minefield() {
+        delete [] Grid;
+    };
 
     enum Cell {
         EMPTY,
@@ -23,31 +31,15 @@ public:
         CLOSED
     };
 
-    struct CellGrid
-    {
-        Cell* GridArr;
+    Cell* Grid;
 
-        unsigned int Height;
-        unsigned int Width;
+    unsigned int Height;
+    unsigned int Width;
 
-        size_t Index( int x, int y ) const { return x + Width * y; }
-
-        CellGrid(unsigned int height, unsigned int width) {
-
-            Height = height;
-            Width = width;
-
-            GridArr = new Cell[height*width];
-        }
-
-        ~CellGrid()
-        {
-            delete [] GridArr;
-        }
-    };
+    size_t Index(int row, int col) const { return row + Width * col; };
+    Cell GetCellAt(unsigned int x, unsigned int y) const { return Grid[Index( x, y)]; };
 
     Cell Open(unsigned int x, unsigned int y);
-    Cell GetCellAt(unsigned int x, unsigned int y) const;
 
     Cell GetRandomCellStatus();
 
