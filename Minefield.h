@@ -1,6 +1,8 @@
 #ifndef MINESWEEP_MINEFIELD_H
 #define MINESWEEP_MINEFIELD_H
 
+#include <stdlib.h>
+
 class Minefield {
 public:
     Minefield() = default;
@@ -23,27 +25,23 @@ public:
 
     struct CellGrid
     {
-        Cell** GridArr;
+        Cell* GridArr;
 
         unsigned int Height;
         unsigned int Width;
+
+        size_t Index( int x, int y ) const { return x + Width * y; }
 
         CellGrid(unsigned int height, unsigned int width) {
 
             Height = height;
             Width = width;
 
-            GridArr = new Cell*[height];
-            for(int i = 0; i < height; ++i) {
-                GridArr[i] = new Cell[width];
-            }
+            GridArr = new Cell[height*width];
         }
 
         ~CellGrid()
         {
-            for(int i = 0; i < Height; ++i) {
-                delete [] GridArr[i];
-            }
             delete [] GridArr;
         }
     };

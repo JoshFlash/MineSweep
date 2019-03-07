@@ -5,6 +5,7 @@
 #include "Minefield.h"
 
 using Cell = Minefield::Cell;
+using CellGrid = Minefield::CellGrid;
 
 unsigned int GridWidth;
 unsigned int GridHeight;
@@ -24,7 +25,7 @@ std::map<Minefield::Cell, std::string> CellToString{
             {Cell::CLOSED, "X"}
     };
 
-void GenerateMinefield(unsigned int width, unsigned int height, unsigned int count);
+CellGrid GenerateMinefield(unsigned int width, unsigned int height, unsigned int count);
 
 int main() {
 
@@ -35,9 +36,9 @@ int main() {
     return 0;
 }
 
-void GenerateMinefield(unsigned int width, unsigned int height, unsigned int count) {
+CellGrid GenerateMinefield(unsigned int width, unsigned int height, unsigned int count) {
 
-    Cell Grid[width][height];
+    CellGrid Grid(width, height);
 
     srand(time(NULL));
 
