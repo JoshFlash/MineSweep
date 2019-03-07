@@ -31,26 +31,25 @@ int main() {
 
     std::cout << "Start\n" << std::endl;
 
-    GenerateMinefield(6,7,3);
+    GenerateMinefield(5,6,30);
 
     return 0;
 }
 
 CellGrid GenerateMinefield(unsigned int width, unsigned int height, unsigned int count) {
 
-    CellGrid Grid(width, height);
+    CellGrid Grid(height, width);
 
     srand(time(NULL));
 
     for (unsigned int m = 0; m < count; m++) {
-        // do nothing right now
+        Grid.GridArr[Grid.Index(rand() % width, rand() % height)] = Cell::MINE;
     }
 
-    Grid[2][2] = Cell::MINE;
 
     for (unsigned int i = 0; i < width; i++) {
         for (unsigned int j = 0; j < height; j++) {
-            Cell NextCell = Grid[i][j];
+            Cell NextCell = Grid.GridArr[Grid.Index(i,j)];
             if (NextCell != Cell::MINE) {
                 NextCell = Cell::EMPTY;
             }
@@ -59,5 +58,5 @@ CellGrid GenerateMinefield(unsigned int width, unsigned int height, unsigned int
         std::cout << "\n";
     }
 
-    // return Grid;
+    return Grid;
 }
