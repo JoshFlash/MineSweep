@@ -6,10 +6,10 @@
 class Minefield
 {
 public:
-    Minefield(unsigned int width, unsigned int height)
+    Minefield(unsigned int height, unsigned int width)
     {
-        Width = width;
         Height = height;
+        Width = width;
 
         Grid = new Cell[width * height];
     };

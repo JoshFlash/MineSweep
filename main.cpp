@@ -13,7 +13,7 @@ int main()
 {
     std::cout << "Start\n" << std::endl;
 
-    Minefield* MF = GenerateMinefield(5, 4, 30);
+    Minefield* MF = GenerateMinefield(5, 6, 3);
 
     return 0;
 }
@@ -24,7 +24,7 @@ Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned i
     srand(time(NULL));
 
     // initialize a minefield where all cells are empty
-    Minefield* GeneratedMineField = new Minefield(width, height);
+    Minefield* GeneratedMineField = new Minefield(height, width);
     for (unsigned int i = 0; i < width; i++)
     {
         for (unsigned int j = 0; j < height; j++)
@@ -40,13 +40,24 @@ Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned i
     }
 
     // assign mines to random cells and calculate adjacent cell status
-    for (unsigned int m = 0; m < count; m++)
+    for (unsigned int k = 0; k < count; k++)
     {
         int x = rand() % width;
         int y = rand() % height;
 
         GeneratedMineField->Grid[GeneratedMineField->Index(x, y)] = Cell::MINE;
-//        GeneratedMineField.IncrementCellStatus(GeneratedMineField.Grid[GeneratedMineField.Index(x-1, y)]);
+
+        for (int m = -1; m <= 1; m++ )
+        {
+            for (int n = -1; n <= 1; n++ )
+            {
+                if ( x + m >= 0 && y + n >= 0 && (x + m) <  width && (y + n) < height )
+                {
+                    GeneratedMineField->IncrementCellStatus(
+                            GeneratedMineField->Grid[GeneratedMineField->Index(x + m, y + n)]);
+                }
+            }
+        }
     }
 
     for (unsigned int i = 0; i < width; i++)
@@ -54,7 +65,6 @@ Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned i
         for (unsigned int j = 0; j < height; j++)
         {
             std::cout << GeneratedMineField->CellToChar[GeneratedMineField->GetCellAt(i,j)];
-//            std::cout << GeneratedMineField.CellToChar[GeneratedMineField.Grid[GeneratedMineField.Index(i, j)]];
         }
         std::cout << '\n';
     }
