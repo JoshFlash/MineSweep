@@ -3,6 +3,8 @@
 
 class Minefield {
 public:
+    Minefield() = default;
+
     enum Cell {
         EMPTY,
         M1,
@@ -18,14 +20,25 @@ public:
         CLOSED
     };
 
+    struct CellIndex
+    {
+        CellIndex();
+
+        int Row = 0, Column = 0;
+        Cell Status = EMPTY;
+    };
+
     int Width;
     int Height;
 
     Cell Open(unsigned int x, unsigned int y);
-
     Cell GetCellAt(unsigned int x, unsigned int y) const;
 
-    void GenerateMinefield(unsigned int width, unsigned int height, unsigned int count);
+    CellIndex* GenerateMinefield(unsigned int width, unsigned int height, unsigned int count);
+
+    Cell GetRandomCellStatus();
+
+    std::string GetCellAsString(Cell cell);
 };
 
 
