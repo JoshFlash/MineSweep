@@ -36,8 +36,8 @@ public:
     unsigned int Height;
     unsigned int Width;
 
-    size_t Index(int row, int col) const { return row + Width * col; };
-    Cell GetCellAt(unsigned int x, unsigned int y) const { return Grid[x + Width * y]; };
+    size_t Index(int x, int y) const { return x + Width * y; };
+    Cell GetCellAt(unsigned int x, unsigned int y) const { return Grid[Index(x,y)]; };
 
     Cell Open(unsigned int x, unsigned int y);
 
