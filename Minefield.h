@@ -21,24 +21,38 @@ public:
         CLOSED
     };
 
-    struct CellIndex
+    struct CellGrid
     {
-        CellIndex();
+        Cell** GridArr;
 
-        int Row = 0, Column = 0;
-        Cell Status = EMPTY;
+        unsigned int Height;
+        unsigned int Width;
+
+        CellGrid(unsigned int height, unsigned int width) {
+
+            Height = height;
+            Width = width;
+
+            GridArr = new Cell*[height];
+            for(int i = 0; i < height; ++i) {
+                GridArr[i] = new Cell[width];
+            }
+        }
+
+        ~CellGrid()
+        {
+            for(int i = 0; i < Height; ++i) {
+                delete [] GridArr[i];
+            }
+            delete [] GridArr;
+        }
     };
 
     Cell Open(unsigned int x, unsigned int y);
     Cell GetCellAt(unsigned int x, unsigned int y) const;
 
-    CellIndex* GenerateMinefield(unsigned int width, unsigned int height, unsigned int count);
-
     Cell GetRandomCellStatus();
 
-    std::string GetCellAsString(Cell cell);
-
-    int GetEmptyRandomIndex(unsigned int i, CellIndex **pIndex);
 };
 
 
