@@ -6,13 +6,7 @@
 #include <time.h>
 #include "Minefield.h"
 
-
 Minefield::Cell Minefield::Open(unsigned int x, unsigned int y) {
-
-    return MINE;
-}
-
-Minefield::Cell Minefield::GetCellAt(unsigned int x, unsigned int y) const {
 
     return MINE;
 }

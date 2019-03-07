@@ -37,7 +37,7 @@ public:
     unsigned int Width;
 
     size_t Index(int row, int col) const { return row + Width * col; };
-    Cell GetCellAt(unsigned int x, unsigned int y) const { return Grid[Index( x, y)]; };
+    Cell GetCellAt(unsigned int x, unsigned int y) const { return Grid[x + Width * y]; };
 
     Cell Open(unsigned int x, unsigned int y);
 
