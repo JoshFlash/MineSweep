@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <stdlib.h>
+#include <time.h>
 #include "Minefield.h"
 
 Minefield::Cell Minefield::Open(unsigned int x, unsigned int y) {
@@ -17,12 +19,13 @@ Minefield::Cell Minefield::GetCellAt(unsigned int x, unsigned int y) const {
 Minefield::CellIndex *Minefield::GenerateMinefield(unsigned int width, unsigned int height, unsigned int count) {
 
     CellIndex *Grid = new CellIndex[width];
+    srand(time(NULL));
 
     for (unsigned int m = 0; m < count; m++) {
         // do nothing right now
     }
 
-    Grid[width - 1].Status = MINE;
+    Grid[rand() % (width*height)].Status = MINE;
 
     for (unsigned int i = 0; i < width; i++) {
         for (unsigned int j = 0; j < height; j++) {

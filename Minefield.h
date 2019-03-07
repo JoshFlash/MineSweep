@@ -4,6 +4,7 @@
 class Minefield {
 public:
     Minefield() = default;
+    ~Minefield();
 
     enum Cell {
         EMPTY,
@@ -27,9 +28,6 @@ public:
         int Row = 0, Column = 0;
         Cell Status = EMPTY;
     };
-
-    int Width;
-    int Height;
 
     Cell Open(unsigned int x, unsigned int y);
     Cell GetCellAt(unsigned int x, unsigned int y) const;
