@@ -11,6 +11,8 @@ int main() {
 
     Minefield::CellIndex* CellGrid = TheMineField->GenerateMinefield(7,8,6);
 
+    delete CellGrid;
+
     return 0;
 }
 

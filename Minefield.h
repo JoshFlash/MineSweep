@@ -39,6 +39,8 @@ public:
     Cell GetRandomCellStatus();
 
     std::string GetCellAsString(Cell cell);
+
+    int GetEmptyRandomIndex(unsigned int i, CellIndex **pIndex);
 };
 
 
