@@ -2,63 +2,62 @@
 #include <string>
 #include <map>
 #include <stdlib.h>
+#include <time.h>
 #include "Minefield.h"
 
 using Cell = Minefield::Cell;
 
-unsigned int GridWidth;
-unsigned int GridHeight;
+Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned int count);
 
-std::map<Minefield::Cell, char> CellToChar{
-            {Cell::EMPTY,  '.'},
-            {Cell::M1,     '1'},
-            {Cell::M2,     '2'},
-            {Cell::M3,     '3'},
-            {Cell::M4,     '4'},
-            {Cell::M5,     '5'},
-            {Cell::M6,     '6'},
-            {Cell::M7,     '7'},
-            {Cell::M8,     '8'},
-            {Cell::M9,     '9'},
-            {Cell::MINE,   'M'},
-            {Cell::CLOSED, 'X'}
-    };
-
-Minefield GenerateMinefield(unsigned int width, unsigned int height, unsigned int count);
-
-int main() {
-
+int main()
+{
     std::cout << "Start\n" << std::endl;
 
-    GenerateMinefield(5,4,30);
+    Minefield* MF = GenerateMinefield(5, 4, 30);
 
     return 0;
 }
 
-Minefield GenerateMinefield(unsigned int width, unsigned int height, unsigned int count) {
-
-    Minefield GenMineField(height, width);
+Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned int count)
+{
+    // generate random seed
     srand(time(NULL));
 
-    if (count > width * height) {
+    // initialize a minefield where all cells are empty
+    Minefield* GeneratedMineField = new Minefield(width, height);
+    for (unsigned int i = 0; i < width; i++)
+    {
+        for (unsigned int j = 0; j < height; j++)
+        {
+            GeneratedMineField->Grid[GeneratedMineField->Index(i, j)] = Cell::EMPTY;
+        }
+    }
+
+    // we cannot have more mines than cells
+    if (count > width * height)
+    {
         count = width * height;
     }
 
-    for (unsigned int m = 0; m < count; m++) {
-        GenMineField.Grid[GenMineField.Index(rand() % width, rand() % height)] = Cell::MINE;
+    // assign mines to random cells and calculate adjacent cell status
+    for (unsigned int m = 0; m < count; m++)
+    {
+        int x = rand() % width;
+        int y = rand() % height;
+
+        GeneratedMineField->Grid[GeneratedMineField->Index(x, y)] = Cell::MINE;
+//        GeneratedMineField.IncrementCellStatus(GeneratedMineField.Grid[GeneratedMineField.Index(x-1, y)]);
     }
 
-
-    for (unsigned int i = 0; i < width; i++) {
-        for (unsigned int j = 0; j < height; j++) {
-            Cell NextCell = GenMineField.Grid[GenMineField.Index(i,j)];
-            if (NextCell != Cell::MINE) {
-                NextCell = Cell::EMPTY;
-            }
-            std::cout << CellToChar[NextCell];
+    for (unsigned int i = 0; i < width; i++)
+    {
+        for (unsigned int j = 0; j < height; j++)
+        {
+            std::cout << GeneratedMineField->CellToChar[GeneratedMineField->GetCellAt(i,j)];
+//            std::cout << GeneratedMineField.CellToChar[GeneratedMineField.Grid[GeneratedMineField.Index(i, j)]];
         }
         std::cout << '\n';
     }
 
-    return GenMineField;
+    return GeneratedMineField;
 }

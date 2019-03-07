@@ -3,20 +3,24 @@
 
 #include <stdlib.h>
 
-class Minefield {
+class Minefield
+{
 public:
-    Minefield(unsigned int height, unsigned int width) {
+    Minefield(unsigned int width, unsigned int height)
+    {
+        Width = width;
+        Height = height;
 
-            Height = height;
-            Width = width;
-
-            Grid = new Cell[height*width];
-    };
-    ~Minefield() {
-        delete [] Grid;
+        Grid = new Cell[width * height];
     };
 
-    enum Cell {
+    ~Minefield()
+    {
+        delete[] Grid;
+    };
+
+    enum Cell
+    {
         EMPTY,
         M1,
         M2,
@@ -31,15 +35,34 @@ public:
         CLOSED
     };
 
+    std::map<Minefield::Cell, char> CellToChar
+    {
+        {Cell::EMPTY,  '.'},
+        {Cell::M1,     '1'},
+        {Cell::M2,     '2'},
+        {Cell::M3,     '3'},
+        {Cell::M4,     '4'},
+        {Cell::M5,     '5'},
+        {Cell::M6,     '6'},
+        {Cell::M7,     '7'},
+        {Cell::M8,     '8'},
+        {Cell::M9,     '9'},
+        {Cell::MINE,   'M'},
+        {Cell::CLOSED, 'X'}
+    };
+
     Cell* Grid;
 
     unsigned int Height;
     unsigned int Width;
 
     size_t Index(int x, int y) const { return x + Width * y; };
-    Cell GetCellAt(unsigned int x, unsigned int y) const { return Grid[Index(x,y)]; };
+
+    Cell GetCellAt(unsigned int x, unsigned int y) const { return Grid[Index(x, y)]; };
 
     Cell Open(unsigned int x, unsigned int y);
+
+    void IncrementCellStatus(Cell &cell);
 
     Cell GetRandomCellStatus();
 
