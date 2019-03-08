@@ -20,7 +20,15 @@ int main()
     MinefieldKey->PrintMinefield();
 
     Minefield* MinefieldGame = new Minefield(height, width);
-    MinefieldGame->InitializeCellGrid(MinefieldGame->Grid, Cell::CLOSED);
+    for (unsigned int i = 0; i < height; i++)
+    {
+        for (unsigned int j = 0; j < width; j++)
+        {
+            MinefieldGame->Grid[MinefieldGame->Index(i, j)] = Cell::CLOSED;
+        }
+    }
+
+    
 
     return 0;
 }
@@ -32,7 +40,13 @@ Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned i
 
     // initialize a minefield where all cells are empty
     Minefield* NewMinefield = new Minefield(height, width);
-    NewMinefield->InitializeCellGrid(NewMinefield->Grid, Cell::EMPTY);
+    for (unsigned int i = 0; i < height; i++)
+    {
+        for (unsigned int j = 0; j < width; j++)
+        {
+            NewMinefield->Grid[NewMinefield->Index(i, j)] = Cell::EMPTY;
+        }
+    }
 
     // we cannot have more mines than cells
     if (count > width * height)
