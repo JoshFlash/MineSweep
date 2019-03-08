@@ -64,8 +64,6 @@ public:
 
     void IncrementCellStatus(Cell &cell);
 
-    Cell GetRandomCellStatus();
-
 };
 
 

@@ -11,11 +11,6 @@ Minefield::Cell Minefield::Open(unsigned int x, unsigned int y)
     return MINE;
 }
 
-Minefield::Cell Minefield::GetRandomCellStatus()
-{
-    return static_cast<Cell>(rand() % MINE);
-}
-
 void Minefield::IncrementCellStatus(Minefield::Cell &cell)
 {
     switch (cell)
