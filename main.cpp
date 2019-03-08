@@ -10,6 +10,7 @@ using Cell = Minefield::Cell;
 Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned int count);
 void GetRandomIndex(int height, int width, int& row, int& column);
 bool SolveMinefieldGame(Minefield* MinefieldGame);
+void MarkAdjacentMines(Minefield* MinefieldGame, Cell currentCell, int row, int col);
 
 int main()
 {
@@ -23,7 +24,9 @@ int main()
 
     MinefieldGame->PrintGameField();
 
-    SolveMinefieldGame(MinefieldGame);
+    bool didWin = SolveMinefieldGame(MinefieldGame);
+
+    std::cout << "did win: " << didWin << std::endl;
 
 
     return 0;
@@ -109,40 +112,7 @@ bool SolveMinefieldGame(Minefield* MinefieldGame)
                 Cell currentCell = MinefieldGame->GameField[MinefieldGame->Index(row, col)];
                 if (currentCell != Cell::CLOSED)
                 {
-                    if (currentCell == Cell::M1)
-                    {
-                        int adjacentClosedCells = 0;
-                        for (int m = -1; m <= 1; m++)
-                        {
-                            for (int n = -1; n <= 1; n++)
-                            {
-                                if (MinefieldGame->IsCellOnGrid((int)row + m, (int)col + n)) 
-                                {
-                                    if (MinefieldGame->GameField[MinefieldGame->Index(row + m, col + n)] == Cell::CLOSED)
-                                    {
-                                        adjacentClosedCells++;
-                                    }
-                                }
-                            }
-                        }
-                        if (adjacentClosedCells == 1)
-                        {
-                            for (int m = -1; m <= 1; m++)
-                            {
-                                for (int n = -1; n <= 1; n++)
-                                {
-                                    if (MinefieldGame->IsCellOnGrid((int)row + m, (int)col + n)) 
-                                    {
-                                        if (MinefieldGame->GameField[MinefieldGame->Index(row + m, col + n)] == Cell::CLOSED)
-                                        {
-                                            //assign mine but do not open it
-                                            MinefieldGame->GameField[MinefieldGame->Index(row + m, col + n)] = Cell::MINE;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    MarkAdjacentMines(MinefieldGame, currentCell, row, col);
                 }
                 else
                 {
@@ -159,6 +129,41 @@ bool SolveMinefieldGame(Minefield* MinefieldGame)
 
     } while (openCell != Cell::MINE && closedCells > 0);
 
+    // if there are no closed cells and we haven't opened a mine cell, we win!
     return closedCells == 0;
+}
 
+void MarkAdjacentMines(Minefield* MinefieldGame, Cell currentCell, int row, int col)
+{
+    int adjacentClosedCells = 0;
+    for (int m = -1; m <= 1; m++)
+    {
+        for (int n = -1; n <= 1; n++)
+        {
+            if (MinefieldGame->IsCellOnGrid(row + m, col + n)) 
+            {
+                if (MinefieldGame->GameField[MinefieldGame->Index(row + m, col + n)] == Cell::CLOSED)
+                {
+                    adjacentClosedCells++;
+                }
+            }
+        }
+    }
+    if (adjacentClosedCells == (int)currentCell)
+    {
+        for (int m = -1; m <= 1; m++)
+        {
+            for (int n = -1; n <= 1; n++)
+            {
+                if (MinefieldGame->IsCellOnGrid((int)row + m, (int)col + n)) 
+                {
+                    if (MinefieldGame->GameField[MinefieldGame->Index(row + m, col + n)] == Cell::CLOSED)
+                    {
+                        //assign mine but do not open it
+                        MinefieldGame->GameField[MinefieldGame->Index(row + m, col + n)] = Cell::MINE;
+                    }
+                }
+            }
+        }
+    }
 }
