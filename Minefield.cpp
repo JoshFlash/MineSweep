@@ -16,7 +16,7 @@ Minefield::Cell Minefield::Open(unsigned int x, unsigned int y)
             {
                 for (int n = -1; n <= 1; n++)
                 {
-                    if ((int)x + m >= 0 && (int)y + n >= 0 && (x + m) < Height && (y + n) < Width) 
+                    if (IsCellOnGrid((int)x + m, (int)y + n)) 
                     {
                         Open(x + m, y + n);
                     }

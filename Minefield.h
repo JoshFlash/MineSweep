@@ -66,6 +66,8 @@ public:
 
     Cell Open(unsigned int x, unsigned int y);
 
+    bool IsCellOnGrid(int x, int y) const { return x >= 0 && y >= 0 && x < Height && y < Width; };
+
     void IncrementCellStatus(Cell &cell);
 
     void PrintMinefield();

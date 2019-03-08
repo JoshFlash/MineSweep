@@ -69,7 +69,7 @@ Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned i
             {
                 for (int n = -1; n <= 1; n++)
                 {
-                    if (row + m >= 0 && col + n >= 0 && (row + m) < height && (col + n) < width) // is cell on the grid
+                    if (NewMinefield->IsCellOnGrid(row + m, col + n))
                     {
                         NewMinefield->IncrementCellStatus(
                                 NewMinefield->Grid[NewMinefield->Index(row + m, col + n)]);
@@ -92,19 +92,33 @@ bool SolveMinefieldGame(Minefield* MinefieldGame)
 {
     unsigned int width = MinefieldGame->Width;
     unsigned int height = MinefieldGame->Height;
+
     int closedCells = width * height;
     int x, y;
+
     GetRandomIndex(height, width, x, y);
     Cell openCell = MinefieldGame->Open(x, y);
 
     do {
+        //check for known mines
         for (unsigned int row = 0; row < height; row++)
         {
             for (unsigned int col = 0; col < width; col++)
             {
-                if (MinefieldGame->GameField[MinefieldGame->Index(row, col)] != Cell::CLOSED)
+                Cell currentCell = MinefieldGame->GameField[MinefieldGame->Index(row, col)];
+                if (currentCell != Cell::CLOSED)
                 {
-                    //check for knwn mines here
+                    // open adjacent cells if empty
+                    for (int m = -1; m <= 1; m++)
+                    {
+                        for (int n = -1; n <= 1; n++)
+                        {
+                            if (MinefieldGame->IsCellOnGrid((int)x + m, (int)y + n)) 
+                            {
+                                // Open(x + m, y + n);
+                            }
+                        }
+                    }
                 }
                 else
                 {
