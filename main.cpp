@@ -9,12 +9,13 @@ using Cell = Minefield::Cell;
 
 Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned int count);
 void GetRandomIndex(int height, int width, int& row, int& column);
+bool SolveMinefieldGame(Minefield* MinefieldGame);
 
 int main()
 {
     int width = 18;
     int height = 9;
-    int count = 12;
+    int count = 10;
 
     Minefield* MinefieldGame = GenerateMinefield(width, height, count);
 
@@ -22,20 +23,7 @@ int main()
 
     MinefieldGame->PrintGameField();
 
-    int x, y;
-    GetRandomIndex(height, width, x, y);
-    Cell openCell = MinefieldGame->Open(x, y);
-    
-    do {
-        GetRandomIndex(height, width, x, y);
-
-        openCell = MinefieldGame->Open(x, y);
-
-        MinefieldGame->PrintGameField();
-
-    } while (openCell != Cell::MINE);
-    
-
+    SolveMinefieldGame(MinefieldGame);
 
 
     return 0;
@@ -98,4 +86,41 @@ void GetRandomIndex(int height, int width, int& row, int& column)
 {
     row = rand() % height;
     column = rand() % width;
+}
+
+bool SolveMinefieldGame(Minefield* MinefieldGame)
+{
+    unsigned int width = MinefieldGame->Width;
+    unsigned int height = MinefieldGame->Height;
+    int closedCells = width * height;
+    int x, y;
+    GetRandomIndex(height, width, x, y);
+    Cell openCell = MinefieldGame->Open(x, y);
+
+    do {
+        for (unsigned int row = 0; row < height; row++)
+        {
+            for (unsigned int col = 0; col < width; col++)
+            {
+                if (MinefieldGame->GameField[MinefieldGame->Index(row, col)] != Cell::CLOSED)
+                {
+                    //check for knwn mines here
+                }
+                else
+                {
+                    closedCells++;
+                }
+            }
+        }
+
+        GetRandomIndex(height, width, x, y);
+
+        openCell = MinefieldGame->Open(x, y);
+
+        MinefieldGame->PrintGameField();
+
+    } while (openCell != Cell::MINE && closedCells > 0);
+
+    return closedCells == 0;
+
 }
