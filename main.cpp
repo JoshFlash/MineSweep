@@ -100,6 +100,7 @@ bool SolveMinefieldGame(Minefield* MinefieldGame)
     Cell openCell = MinefieldGame->Open(x, y);
 
     do {
+        closedCells = 0;
         //check for known mines
         for (unsigned int row = 0; row < height; row++)
         {
@@ -108,14 +109,37 @@ bool SolveMinefieldGame(Minefield* MinefieldGame)
                 Cell currentCell = MinefieldGame->GameField[MinefieldGame->Index(row, col)];
                 if (currentCell != Cell::CLOSED)
                 {
-                    // open adjacent cells if empty
-                    for (int m = -1; m <= 1; m++)
+                    if (currentCell == Cell::M1)
                     {
-                        for (int n = -1; n <= 1; n++)
+                        int adjacentClosedCells = 0;
+                        for (int m = -1; m <= 1; m++)
                         {
-                            if (MinefieldGame->IsCellOnGrid((int)x + m, (int)y + n)) 
+                            for (int n = -1; n <= 1; n++)
                             {
-                                // Open(x + m, y + n);
+                                if (MinefieldGame->IsCellOnGrid((int)row + m, (int)col + n)) 
+                                {
+                                    if (MinefieldGame->GameField[MinefieldGame->Index(row + m, col + n)] == Cell::CLOSED)
+                                    {
+                                        adjacentClosedCells++;
+                                    }
+                                }
+                            }
+                        }
+                        if (adjacentClosedCells == 1)
+                        {
+                            for (int m = -1; m <= 1; m++)
+                            {
+                                for (int n = -1; n <= 1; n++)
+                                {
+                                    if (MinefieldGame->IsCellOnGrid((int)row + m, (int)col + n)) 
+                                    {
+                                        if (MinefieldGame->GameField[MinefieldGame->Index(row + m, col + n)] == Cell::CLOSED)
+                                        {
+                                            //assign mine but do not open it
+                                            MinefieldGame->GameField[MinefieldGame->Index(row + m, col + n)] = Cell::MINE;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
