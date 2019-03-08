@@ -13,7 +13,7 @@ int main()
 {
     std::cout << "Start\n" << std::endl;
 
-    Minefield* MF = GenerateMinefield(5, 6, 3);
+    Minefield* MF = GenerateMinefield(18, 9, 12);
 
     return 0;
 }
@@ -25,9 +25,9 @@ Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned i
 
     // initialize a minefield where all cells are empty
     Minefield* GeneratedMineField = new Minefield(height, width);
-    for (unsigned int i = 0; i < width; i++)
+    for (unsigned int i = 0; i < height; i++)
     {
-        for (unsigned int j = 0; j < height; j++)
+        for (unsigned int j = 0; j < width; j++)
         {
             GeneratedMineField->Grid[GeneratedMineField->Index(i, j)] = Cell::EMPTY;
         }
@@ -39,30 +39,38 @@ Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned i
         count = width * height;
     }
 
-    // assign mines to random cells and calculate adjacent cell status
-    for (unsigned int k = 0; k < count; k++)
-    {
-        int x = rand() % width;
-        int y = rand() % height;
+    // assign mines to random cells
+    int unassignedMines = count;
+    do {
+        int row = rand() % height;
+        int col = rand() % width;
 
-        GeneratedMineField->Grid[GeneratedMineField->Index(x, y)] = Cell::MINE;
-
-        for (int m = -1; m <= 1; m++ )
+        // skip and get another random index if the cell is already a mine
+        if (GeneratedMineField->Grid[GeneratedMineField->Index(row, col)] != Cell::MINE)
         {
-            for (int n = -1; n <= 1; n++ )
+            GeneratedMineField->Grid[GeneratedMineField->Index(row, col)] = Cell::MINE;
+            unassignedMines--;
+
+            // increment the 8 adjacent cells **note: when called on the mine cell (m = n = 0) IncrementCellStatus does nothing**
+            for (int m = -1; m <= 1; m++)
             {
-                if ( x + m >= 0 && y + n >= 0 && (x + m) <  width && (y + n) < height )
+                for (int n = -1; n <= 1; n++)
                 {
-                    GeneratedMineField->IncrementCellStatus(
-                            GeneratedMineField->Grid[GeneratedMineField->Index(x + m, y + n)]);
+                    if (row + m >= 0 && col + n >= 0 && (row + m) < height && (col + n) < width)     // check the cell is on the grid
+                    {
+                        GeneratedMineField->IncrementCellStatus(
+                                GeneratedMineField->Grid[GeneratedMineField->Index(row + m, col + n)]);
+                    }
                 }
             }
         }
-    }
 
-    for (unsigned int i = 0; i < width; i++)
+    } while (unassignedMines > 0);
+
+    // print out the Minefield
+    for (unsigned int i = 0; i < height; i++)
     {
-        for (unsigned int j = 0; j < height; j++)
+        for (unsigned int j = 0; j < width; j++)
         {
             std::cout << GeneratedMineField->CellToChar[GeneratedMineField->GetCellAt(i,j)];
         }
