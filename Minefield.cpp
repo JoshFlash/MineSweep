@@ -8,13 +8,13 @@ Minefield::Cell Minefield::Open(unsigned int x, unsigned int y)
     return MINE;
 }
 
-void Minefield::InitializeCellGrid(Minefield::Cell initialCell)
+void Minefield::InitializeCellGrid(Minefield::Cell* &grid, Minefield::Cell initialCell)
 {
     for (unsigned int i = 0; i < Height; i++)
     {
         for (unsigned int j = 0; j < Width; j++)
         {
-            Grid[Index(i, j)] = initialCell;
+            grid[Index(i, j)] = initialCell;
         }
     }
 }

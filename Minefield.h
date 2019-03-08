@@ -2,6 +2,7 @@
 #define MINESWEEP_MINEFIELD_H
 
 #include <stdlib.h>
+#include <map>
 
 class Minefield
 {
@@ -62,7 +63,7 @@ public:
 
     Cell Open(unsigned int x, unsigned int y);
 
-    void InitializeCellGrid(Cell initialCell);
+    void InitializeCellGrid(Cell* &grid, Cell initialCell);
 
     void IncrementCellStatus(Cell &cell);
 
