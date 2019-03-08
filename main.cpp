@@ -8,6 +8,7 @@
 using Cell = Minefield::Cell;
 
 Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned int count);
+void GetRandomIndex(int height, int width, int& row, int& column);
 
 int main()
 {
@@ -21,9 +22,20 @@ int main()
 
     MinefieldGame->PrintGameField();
 
-    MinefieldGame->OpenAll();
+    int x, y;
+    GetRandomIndex(height, width, x, y);
+    Cell openCell = MinefieldGame->Open(x, y);
+    
+    do {
+        GetRandomIndex(height, width, x, y);
 
-    MinefieldGame->PrintGameField();
+        openCell = MinefieldGame->Open(x, y);
+
+        MinefieldGame->PrintGameField();
+
+    } while (openCell != Cell::MINE);
+    
+
 
 
     return 0;
@@ -54,8 +66,9 @@ Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned i
     // assign mines to random cells
     int unassignedMines = count;
     do {
-        int row = rand() % height;
-        int col = rand() % width;
+        int row;
+        int col;
+        GetRandomIndex(height, width, row, col);
 
         // skip and get another random index if the cell is already a mine
         if (NewMinefield->Grid[NewMinefield->Index(row, col)] != Cell::MINE)
@@ -79,4 +92,10 @@ Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned i
     } while (unassignedMines > 0);
 
     return NewMinefield;
+}
+
+void GetRandomIndex(int height, int width, int& row, int& column)
+{
+    row = rand() % height;
+    column = rand() % width;
 }
