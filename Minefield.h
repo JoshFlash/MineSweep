@@ -12,8 +12,8 @@ public:
         Height = height;
         Width = width;
 
-        Grid = new Cell[width * height];
-        GameField = new Cell[width * height];
+        Grid = new Cell[width * height * sizeof(Cell)];
+        GameField = new Cell[width * height * sizeof(Cell)];
     };
 
     ~Minefield()
@@ -71,6 +71,8 @@ public:
     void PrintMinefield();
 
     void PrintGameField();
+
+    void OpenAll();
 
 };
 

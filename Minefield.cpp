@@ -90,3 +90,14 @@ void Minefield::PrintGameField()
     }
     std::cout << '\n';
 }
+
+void Minefield::OpenAll()
+{
+    for (unsigned int row = 0; row < Height; row++)
+    {
+        for (unsigned int col = 0; col < Width; col++)
+        {
+            Open(row,col);
+        }
+    }
+}

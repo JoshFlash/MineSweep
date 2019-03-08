@@ -19,7 +19,9 @@ int main()
 
     MinefieldGame->PrintMinefield();
 
-    MinefieldGame->Open(2,3);
+    MinefieldGame->PrintGameField();
+
+    MinefieldGame->OpenAll();
 
     MinefieldGame->PrintGameField();
 
