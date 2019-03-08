@@ -62,6 +62,8 @@ public:
 
     Cell Open(unsigned int x, unsigned int y);
 
+    void InitializeCellGrid(Cell initialCell);
+
     void IncrementCellStatus(Cell &cell);
 
     void PrintMinefield();

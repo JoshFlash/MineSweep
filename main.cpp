@@ -11,11 +11,16 @@ Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned i
 
 int main()
 {
-    std::cout << "Start\n" << std::endl;
+    int width = 18;
+    int height = 9;
+    int count = 12;
 
-    Minefield* MF = GenerateMinefield(18, 9, 12);
+    Minefield* MinefieldKey = GenerateMinefield(width, height, count);
 
-    MF->PrintMinefield();
+    MinefieldKey->PrintMinefield();
+
+    Minefield* MinfieldGame = new Minefield(height, width);
+    MinfieldGame->InitializeCellGrid(Cell::CLOSED);
 
     return 0;
 }
@@ -27,13 +32,7 @@ Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned i
 
     // initialize a minefield where all cells are empty
     Minefield* NewMinefield = new Minefield(height, width);
-    for (unsigned int i = 0; i < height; i++)
-    {
-        for (unsigned int j = 0; j < width; j++)
-        {
-            NewMinefield->Grid[NewMinefield->Index(i, j)] = Cell::EMPTY;
-        }
-    }
+    NewMinefield->InitializeCellGrid(Cell::EMPTY);
 
     // we cannot have more mines than cells
     if (count > width * height)
@@ -53,7 +52,7 @@ Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned i
             NewMinefield->Grid[NewMinefield->Index(row, col)] = Cell::MINE;
             unassignedMines--;
 
-            // increment the 8 adjacent cells **note: when called on a mine cell IncrementCellStatus does nothing**
+            // increment status of 8 adjacent cells **note: when called on a mine cell IncrementCellStatus does nothing**
             for (int m = -1; m <= 1; m++)
             {
                 for (int n = -1; n <= 1; n++)

@@ -1,14 +1,22 @@
 
 #include <iostream>
-#include <string>
 #include <map>
-#include <stdlib.h>
-#include <time.h>
 #include "Minefield.h"
 
 Minefield::Cell Minefield::Open(unsigned int x, unsigned int y)
 {
     return MINE;
+}
+
+void Minefield::InitializeCellGrid(Minefield::Cell initialCell)
+{
+    for (unsigned int i = 0; i < Height; i++)
+    {
+        for (unsigned int j = 0; j < Width; j++)
+        {
+            Grid[Index(i, j)] = initialCell;
+        }
+    }
 }
 
 void Minefield::IncrementCellStatus(Minefield::Cell &cell)
@@ -51,12 +59,11 @@ void Minefield::IncrementCellStatus(Minefield::Cell &cell)
 
 void Minefield::PrintMinefield()
 {
-    // print out the Minefield
-    for (unsigned int i = 0; i < Height; i++)
+    for (unsigned int row = 0; row < Height; row++)
     {
-        for (unsigned int j = 0; j < Width; j++)
+        for (unsigned int col = 0; col < Width; col++)
         {
-            std::cout << CellToChar[GetCellAt(i,j)];
+            std::cout << CellToChar[GetCellAt(row,col)];
         }
         std::cout << '\n';
     }
