@@ -8,13 +8,23 @@ Minefield::Cell Minefield::Open(unsigned int x, unsigned int y)
     Cell cellAtIndex = GetCellAt(x,y);
     if (GameField[Index(x,y)] == Cell::CLOSED)
     {
-        GameField[Index(x,y)] = GetCellAt(x,y);
-        if (GetCellAt(x,y) == Cell::EMPTY)
+        GameField[Index(x,y)] = cellAtIndex;
+        if (cellAtIndex == Cell::EMPTY)
         {
-
+            // open adjacent cells if empty
+            for (int m = -1; m <= 1; m++)
+            {
+                for (int n = -1; n <= 1; n++)
+                {
+                    if ((int)x + m >= 0 && (int)y + n >= 0 && (x + m) < Height && (y + n) < Width) 
+                    {
+                        Open(x + m, y + n);
+                    }
+                }
+            }
         }
     }
-    return Cell::CLOSED;
+    return cellAtIndex;
 }
 
 void Minefield::IncrementCellStatus(Minefield::Cell &cell)
@@ -65,4 +75,18 @@ void Minefield::PrintMinefield()
         }
         std::cout << '\n';
     }
+    std::cout << '\n';
+}
+
+void Minefield::PrintGameField()
+{
+    for (unsigned int row = 0; row < Height; row++)
+    {
+        for (unsigned int col = 0; col < Width; col++)
+        {
+            std::cout << CellToChar[GameField[Index(row, col)]];
+        }
+        std::cout << '\n';
+    }
+    std::cout << '\n';
 }

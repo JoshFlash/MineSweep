@@ -21,6 +21,8 @@ int main()
 
     MinefieldGame->Open(2,3);
 
+    MinefieldGame->PrintGameField();
+
 
     return 0;
 }

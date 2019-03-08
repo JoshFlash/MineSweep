@@ -70,6 +70,8 @@ public:
 
     void PrintMinefield();
 
+    void PrintGameField();
+
 };
 
 
