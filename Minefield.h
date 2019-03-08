@@ -64,6 +64,8 @@ public:
 
     void IncrementCellStatus(Cell &cell);
 
+    void PrintMinefield();
+
 };
 
 

@@ -48,3 +48,16 @@ void Minefield::IncrementCellStatus(Minefield::Cell &cell)
             break;
     }
 }
+
+void Minefield::PrintMinefield()
+{
+    // print out the Minefield
+    for (unsigned int i = 0; i < Height; i++)
+    {
+        for (unsigned int j = 0; j < Width; j++)
+        {
+            std::cout << CellToChar[GetCellAt(i,j)];
+        }
+        std::cout << '\n';
+    }
+}
