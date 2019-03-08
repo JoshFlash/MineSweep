@@ -5,7 +5,16 @@
 
 Minefield::Cell Minefield::Open(unsigned int x, unsigned int y)
 {
-    return MINE;
+    Cell cellAtIndex = GetCellAt(x,y);
+    if (GameField[Index(x,y)] == Cell::CLOSED)
+    {
+        GameField[Index(x,y)] = GetCellAt(x,y);
+        if (GetCellAt(x,y) == Cell::EMPTY)
+        {
+
+        }
+    }
+    return Cell::CLOSED;
 }
 
 void Minefield::IncrementCellStatus(Minefield::Cell &cell)

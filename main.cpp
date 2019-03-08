@@ -15,20 +15,12 @@ int main()
     int height = 9;
     int count = 12;
 
-    Minefield* MinefieldKey = GenerateMinefield(width, height, count);
+    Minefield* MinefieldGame = GenerateMinefield(width, height, count);
 
-    MinefieldKey->PrintMinefield();
+    MinefieldGame->PrintMinefield();
 
-    Minefield* MinefieldGame = new Minefield(height, width);
-    for (unsigned int i = 0; i < height; i++)
-    {
-        for (unsigned int j = 0; j < width; j++)
-        {
-            MinefieldGame->Grid[MinefieldGame->Index(i, j)] = Cell::CLOSED;
-        }
-    }
+    MinefieldGame->Open(2,3);
 
-    
 
     return 0;
 }
@@ -45,6 +37,7 @@ Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned i
         for (unsigned int j = 0; j < width; j++)
         {
             NewMinefield->Grid[NewMinefield->Index(i, j)] = Cell::EMPTY;
+            NewMinefield->GameField[NewMinefield->Index(i, j)] = Cell::CLOSED;
         }
     }
 

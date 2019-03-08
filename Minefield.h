@@ -13,11 +13,13 @@ public:
         Width = width;
 
         Grid = new Cell[width * height];
+        GameField = new Cell[width * height];
     };
 
     ~Minefield()
     {
         delete[] Grid;
+        delete[] GameField;
     };
 
     enum Cell
@@ -53,6 +55,7 @@ public:
     };
 
     Cell* Grid;
+    Cell* GameField;
 
     unsigned int Height;
     unsigned int Width;
