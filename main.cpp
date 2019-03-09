@@ -96,15 +96,24 @@ bool SolveMinefieldGame(Minefield* MinefieldGame)
     unsigned int width = MinefieldGame->Width;
     unsigned int height = MinefieldGame->Height;
 
-    int closedCells = width * height;
+    int closedCells;;
     int x, y;
-
-    GetRandomIndex(height, width, x, y);
-    Cell openCell = MinefieldGame->Open(x, y);
+    Cell openCell = Cell::EMPTY;
 
     do {
+        // get random closed cell
+        do {
+            GetRandomIndex(height, width, x, y);
+            openCell = MinefieldGame->GameField[MinefieldGame->Index(x, y)];
+
+        } while (openCell != Cell::CLOSED);
+
+        openCell = MinefieldGame->Open(x, y);
+
+        MinefieldGame->PrintGameField();
+
         closedCells = 0;
-        //check for known mines
+        // check for known mines
         for (unsigned int row = 0; row < height; row++)
         {
             for (unsigned int col = 0; col < width; col++)
@@ -116,16 +125,36 @@ bool SolveMinefieldGame(Minefield* MinefieldGame)
                 }
                 else
                 {
-                    closedCells++;
+                    // open safe closed cells
+                    for (int m = -1; m <= 1; m++)
+                    {
+                        for (int n = -1; n <= 1; n++)
+                        {
+                            if (MinefieldGame->IsCellOnGrid(row + m, col + n)) 
+                            {
+                                if (MinefieldGame->GameField[MinefieldGame->Index(row + m, col + n)] == Cell::EMPTY)
+                                {
+                                    MinefieldGame->Open(row, col);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
 
-        GetRandomIndex(height, width, x, y);
-
-        openCell = MinefieldGame->Open(x, y);
-
-        MinefieldGame->PrintGameField();
+        // Get closed cell count after marking mines and opening safe cells
+        for (unsigned int row = 0; row < height; row++)
+        {
+            for (unsigned int col = 0; col < width; col++)
+            {
+                Cell currentCell = MinefieldGame->GameField[MinefieldGame->Index(row, col)];
+                if (currentCell == Cell::CLOSED)
+                {
+                    closedCells++;
+                }
+            }
+        }
 
     } while (openCell != Cell::MINE && closedCells > 0);
 

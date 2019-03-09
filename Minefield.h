@@ -51,7 +51,7 @@ public:
         {Cell::M8,     '8'},
         {Cell::M9,     '9'},
         {Cell::MINE,   'M'},
-        {Cell::CLOSED, 'X'}
+        {Cell::CLOSED, '#'}
     };
 
     Cell* Grid;
