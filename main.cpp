@@ -1,3 +1,8 @@
+/******
+Minefield by Josh Flash
+compiled and tested with clang++ and g++ using c++11 and greater
+******/
+
 #include <iostream>
 #include <string>
 #include <map>
@@ -11,12 +16,22 @@ Minefield* GenerateMinefield(unsigned int width, unsigned int height, unsigned i
 void GetRandomIndex(int height, int width, int& row, int& column);
 bool SolveMinefieldGame(Minefield* MinefieldGame);
 void MarkAdjacentMines(Minefield* MinefieldGame, Cell currentCell, int row, int col);
+void OpenSurroundingCells(Minefield* MinefieldGame, int centerX, int centerY, int skipX, int skipY);
 
 int main()
 {
     int width = 18;
     int height = 9;
     int count = 10;
+
+    std::cout << "\nPlease Enter Width: ";
+    std::cin >> width;
+
+    std::cout << "\nPlease Enter Height: "; 
+    std::cin >> height;
+
+    std::cout << "\nPlease Enter Bomb Count: "; 
+    std::cin >> count;
 
     Minefield* MinefieldGame = GenerateMinefield(width, height, count);
 
@@ -26,7 +41,16 @@ int main()
 
     bool didWin = SolveMinefieldGame(MinefieldGame);
 
-    std::cout << "did win: " << didWin << std::endl;
+    MinefieldGame->PrintGameField();
+
+    if (didWin)
+    {
+        std::cout << "Solver beat the game!" << std::endl;
+    }
+    else
+    {
+        std::cout << "Solver lost :(" << std::endl;
+    }
 
 
     return 0;
@@ -101,16 +125,21 @@ bool SolveMinefieldGame(Minefield* MinefieldGame)
     Cell openCell = Cell::EMPTY;
 
     do {
-        // get random closed cell
+        // get random closed cell that isn't marked as mine
         do {
             GetRandomIndex(height, width, x, y);
             openCell = MinefieldGame->GameField[MinefieldGame->Index(x, y)];
 
-        } while (openCell != Cell::CLOSED);
+        } while (openCell != Cell::CLOSED || openCell == Cell::M9);
 
         openCell = MinefieldGame->Open(x, y);
 
         MinefieldGame->PrintGameField();
+
+        if (openCell == Cell::MINE)
+        {
+            return false;
+        }
 
         closedCells = 0;
         // check for known mines
@@ -118,6 +147,7 @@ bool SolveMinefieldGame(Minefield* MinefieldGame)
         {
             for (unsigned int col = 0; col < width; col++)
             {
+                //TODO add more pattern checks here
                 Cell currentCell = MinefieldGame->GameField[MinefieldGame->Index(row, col)];
                 if (currentCell != Cell::CLOSED)
                 {
@@ -125,16 +155,17 @@ bool SolveMinefieldGame(Minefield* MinefieldGame)
                 }
                 else
                 {
-                    // open safe closed cells
                     for (int m = -1; m <= 1; m++)
                     {
                         for (int n = -1; n <= 1; n++)
                         {
                             if (MinefieldGame->IsCellOnGrid(row + m, col + n)) 
                             {
+                                // open safe closed cells that are next to empty cells
                                 if (MinefieldGame->GameField[MinefieldGame->Index(row + m, col + n)] == Cell::EMPTY)
                                 {
                                     MinefieldGame->Open(row, col);
+                                    MinefieldGame->PrintGameField();
                                 }
                             }
                         }
@@ -156,7 +187,7 @@ bool SolveMinefieldGame(Minefield* MinefieldGame)
             }
         }
 
-    } while (openCell != Cell::MINE && closedCells > 0);
+    } while (closedCells > 0);
 
     // if there are no closed cells and we haven't opened a mine cell, we win!
     return closedCells == 0;
@@ -171,13 +202,20 @@ void MarkAdjacentMines(Minefield* MinefieldGame, Cell currentCell, int row, int 
         {
             if (MinefieldGame->IsCellOnGrid(row + m, col + n)) 
             {
-                if (MinefieldGame->GameField[MinefieldGame->Index(row + m, col + n)] == Cell::CLOSED)
+                Cell adjacentCell = MinefieldGame->GameField[MinefieldGame->Index(row + m, col + n)];
+                if ( adjacentCell == Cell::CLOSED || adjacentCell == Cell::M9)
                 {
                     adjacentClosedCells++;
+                    // if a known mine is next to a M1, it is safe to open cells surrounding M1 (except M9)
+                    if (currentCell == Cell::M9 && adjacentCell == Cell::M1)
+                    {
+                        OpenSurroundingCells(MinefieldGame, row + m, col + n, row, col);
+                    }
                 }
             }
         }
     }
+    // if there are as many closed cells next to the cell as its count, we know it is a mine 
     if (adjacentClosedCells == (int)currentCell)
     {
         for (int m = -1; m <= 1; m++)
@@ -189,10 +227,28 @@ void MarkAdjacentMines(Minefield* MinefieldGame, Cell currentCell, int row, int 
                     if (MinefieldGame->GameField[MinefieldGame->Index(row + m, col + n)] == Cell::CLOSED)
                     {
                         //assign mine but do not open it
-                        MinefieldGame->GameField[MinefieldGame->Index(row + m, col + n)] = Cell::MINE;
+                        MinefieldGame->GameField[MinefieldGame->Index(row + m, col + n)] = Cell::M9;
                     }
                 }
             }
         }
     }
+}
+
+void OpenSurroundingCells(Minefield* MinefieldGame, int centerX, int centerY, int skipX, int skipY)
+{
+    for (int m = -1; m <= 1; m++)
+    {
+        for (int n = -1; n <= 1; n++)
+        {
+            if (MinefieldGame->IsCellOnGrid(centerX + m, centerY + n)) 
+            {
+                if (!(centerX + m == skipX && centerY + n == skipY))
+                {
+                    MinefieldGame->Open(centerX + m, centerY + n);
+                }  
+            }
+        }
+    }
+
 }

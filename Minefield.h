@@ -49,7 +49,7 @@ public:
         {Cell::M6,     '6'},
         {Cell::M7,     '7'},
         {Cell::M8,     '8'},
-        {Cell::M9,     '9'},
+        {Cell::M9,     '+'},
         {Cell::MINE,   'M'},
         {Cell::CLOSED, '#'}
     };
@@ -73,8 +73,6 @@ public:
     void PrintMinefield();
 
     void PrintGameField();
-
-    void OpenAll();
 
 };
 
